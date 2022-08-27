@@ -1,0 +1,43 @@
+$linkColor: #000
+
+.tree
+    // border: 1px solid #000
+    position: relative
+    height: 100vh
+    width: 100vw
+    &__link-list
+        position: absolute
+    &__link-item
+        stroke-width: 1px
+        fill: none
+        stroke: $linkColor
+    &__link-midpoint
+        fill: $linkColor
+    // &__node
+    //     stroke: none
+    //     &--back
+    //         fill: #fff
+    //         filter: drop-shadow( 2px 2px 3px rgba(0, 0, 0, .7))
+    //     &--top
+    //         fill: none
+    //         cursor: pointer
+    //         pointer-events: all
+    &__node-list
+        position: absolute
+        padding: 0
+        margin: 0
+        list-style: none
+    &__node-item
+        position: absolute
+        // border: 1px solid #000
+        // display: flex
+        // align-items: center
+        // justify-content: center
+        // background-color: #fff
+        // border-radius: 5px
+        // box-shadow: 0px 0px 5px rgba(0, 0, 0, .5)
+        transform: translate(-50%, -50%)
+    &__node-list, &__link-list
+        top: 50%
+        left: 50%
+        transform: translate(-50%, -50%)

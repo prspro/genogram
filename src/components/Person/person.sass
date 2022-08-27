@@ -1,0 +1,45 @@
+$maleColor: #5899ee
+$femaleColor: #ee3bd0
+    
+.person
+    // border-radius: 5px
+    background-color: #fff
+    // min-width: 150px
+    display: flex
+    &.male
+        // background-color: $maleColor
+        box-shadow: 0px 0px 5px $maleColor
+    &.female
+        // background-color: $femaleColor
+        box-shadow: 0px 0px 5px $femaleColor
+    // p, span
+    // p
+    //     margin: 0
+    //     padding: 0
+    //     line-height: 1
+    //     display: inline-block
+    &__data-wrap
+        padding: 5px
+        flex: 1
+    &__switch
+        background: none
+    &__prop-list
+        list-style: none
+        display: block
+        padding: 0
+        margin: 0
+        line-height: 1
+    &__prop-item
+        display: flex
+        align-items: center
+        margin: 3px
+        // white-space: nowrap
+    &__prop-name
+        margin-right: 5px
+    &__prop-value
+        flex: 1
+        display: flex
+    // &__birthday
+    //     margin-right: 5px
+    //     &:last-of-type
+    //         margin-right: 0
