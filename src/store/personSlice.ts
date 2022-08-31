@@ -18,9 +18,10 @@ const initialState: IInitialState = {
       parents: [],
       // birthday: new Date(1995, 11, 17),
       birthday: undefined,
+      isRemovable: false,
     },
   ],
-  currentPersonID: "",
+  currentPersonID: "root",
 }
 
 const personSlice = createSlice({
@@ -31,11 +32,13 @@ const personSlice = createSlice({
       state.personList.push(action.payload);
     },
     removePerson: (state, action: PayloadAction<IPerson>) => {
-      state.personList = state.personList.filter((entry) => entry.id !== action.payload.id);
+      state.personList = state.personList.filter((entry) => entry.id !== action.payload.id).map(entry => {
+        return {...entry, parents: entry.parents.filter(parentID => parentID !== action.payload.id)}
+      });
     },
     editPerson: (state, action: PayloadAction<IPerson>) => {
       state.personList = state.personList.map(person => {
-        if (person.id === action.payload.id) {
+        if (person.id === state.currentPersonID) {
           return action.payload;
         } else {
           return person;
@@ -46,6 +49,8 @@ const personSlice = createSlice({
       state.personList = state.personList.map(person => {
         if (person.id === state.currentPersonID) {
           return {...person, parents: [...person.parents, action.payload]};
+        } else if (person.id === state.currentPersonID) {
+          return {...person, isRemovable: false};
         } else {
           return person;
         }
@@ -55,6 +60,8 @@ const personSlice = createSlice({
       state.personList = state.personList.map(person => {
         if (person.id === action.payload) {
           return {...person, parents: [...person.parents, state.currentPersonID]};
+        } else if (person.id === state.currentPersonID) {
+          return {...person, isRemovable: false};
         } else {
           return person;
         }

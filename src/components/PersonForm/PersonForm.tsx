@@ -28,7 +28,11 @@ const PersonForm = () => {
           <input {...register("sex")} type="radio" value="female" />
           <label>female</label>
         </div>
-        <input type="date" {...register("birthday")} />
+        <div>
+          <input {...register("dateDay")} type={"text"} className="person-form__input"/>
+          <input {...register("dateMonth")} type={"text"} className="person-form__input"/>
+          <input {...register("dateYear")} type={"text"} className="person-form__input"/>
+        </div>
         <input className="person-form__input" type="submit" />
       </form>
     </div>

@@ -7,6 +7,7 @@ export interface IPerson {
   sex: "male" | "female";
   parents: string[];
   position?: IPoint;
+  isRemovable: boolean;
 }
 
 export interface IPersonEdge {

@@ -16,10 +16,8 @@ const Person = ({ person }: IPersonComponentProps) => {
     addAscendant,
     addDescendant,
     editPerson,
-    removePerson,
+    removePersonFromTree,
   } = usePerson();
-
-  console.log(typeof person.birthday);
 
   return (
     <div className={classNames("person", person.sex)}>
@@ -43,22 +41,21 @@ const Person = ({ person }: IPersonComponentProps) => {
             <li className="person__prop-item">
               <span className="person__prop-name">Birthday:</span>
               <div className="person__prop-value">
-                <EditableField
-                  value={
-                    person.birthday
-                      ? person.birthday?.getFullYear().toString()
-                      : "??"
-                  }
-                  className="person__birthday person__birthday--day"
-                />
-                {/* <EditableField
-                    value={person.birthday ? person.birthday?.getMonth().toString() : "??"}
-                    className="person__birthday person__birthday--month"
-                  />
-                  <EditableField
-                    value={person.birthday ? person.birthday?.getFullYear().toString() : "????"}
-                    className="person__birthday person__birthday--year"
-                  /> */}
+                <span className="person__birthday person__birthday--day">
+                  {person.birthday
+                    ? person.birthday?.getDate().toString()
+                    : "??"}
+                </span>
+                <span className="person__birthday person__birthday--month">
+                  {person.birthday
+                    ? person.birthday?.getMonth().toString()
+                    : "??"}
+                </span>
+                <span className="person__birthday person__birthday--year">
+                  {person.birthday
+                    ? person.birthday?.getFullYear().toString()
+                    : "????"}
+                </span>
               </div>
             </li>
           </ul>
@@ -69,7 +66,7 @@ const Person = ({ person }: IPersonComponentProps) => {
             )}
             <button onClick={() => addDescendant(person)}>Add child</button>
             <button onClick={() => editPerson(person)}>Edit</button>
-            <button onClick={() => removePerson(person)}>remove</button>
+            <button onClick={() => removePersonFromTree(person)}>remove</button>
           </div>
         )}
       </div>

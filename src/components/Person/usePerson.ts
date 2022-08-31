@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { addPerson, editPerson } from "../../store/personSlice";
 import { showOverlay } from "../../store/overlaySlice";
 import { showPersonForm } from "../../store/personFormSlice";
-import { setCurrentPersonID } from "../../store/personSlice";
+import { setCurrentPersonID, removePerson } from "../../store/personSlice";
 import { setSubmitType } from "../../store/personFormSlice";
 import { IPerson } from "../../types/types";
-// import { v4 as uuidv4 } from "uuid";
 
 interface IUsePerson {
   isSwitched: boolean;
@@ -14,7 +12,7 @@ interface IUsePerson {
   addAscendant: (arg: IPerson) => void;
   addDescendant: (arg: IPerson) => void;
   editPerson: (arg: IPerson) => void;
-  removePerson: (arg: IPerson) => void;
+  removePersonFromTree: (arg: IPerson) => void;
 }
 
 const usePerson = (): IUsePerson => {
@@ -40,9 +38,16 @@ const usePerson = (): IUsePerson => {
     dispatch(showPersonForm());
   };
 
-  const editPerson = (currentPerson: IPerson): void => {};
+  const editPerson = (currentPerson: IPerson): void => {
+    dispatch(setSubmitType("editPerson"));
+    dispatch(setCurrentPersonID(currentPerson.id));
+    dispatch(showOverlay());
+    dispatch(showPersonForm());
+  };
 
-  const removePerson = (currentPerson: IPerson): void => {};
+  const removePersonFromTree = (currentPerson: IPerson): void => {
+    dispatch(removePerson(currentPerson));
+  };
 
   return {
     isSwitched,
@@ -50,7 +55,7 @@ const usePerson = (): IUsePerson => {
     addAscendant,
     addDescendant,
     editPerson,
-    removePerson,
+    removePersonFromTree,
   };
 };
 

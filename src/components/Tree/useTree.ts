@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import dagre from "dagre";
 import {
   IGraphData,
@@ -22,30 +21,6 @@ interface IUseTree {
 }
 
 export default function useTree(): IUseTree {
-  // const [personList, setPersonList] = useState<IPerson[]>([
-  //   {
-  //     id: "root",
-  //     name: "Root",
-  //     surName: "Person",
-  //     sex: "male",
-  //     parents: ["ascendant1", "ascendant2"],
-  //   },
-  //   {
-  //     id: "ascendant1",
-  //     name: "1",
-  //     surName: "parent",
-  //     sex: "female",
-  //     parents: [],
-  //   },
-  //   {
-  //     id: "ascendant2",
-  //     name: "2",
-  //     surName: "parent",
-  //     sex: "male",
-  //     parents: [],
-  //     birthday: new Date(1995, 11, 17),
-  //   },
-  // ]);
 
   const personList = Array.from(useSelector((state: RootState) => state.personList.personList));
 
@@ -211,6 +186,7 @@ export default function useTree(): IUseTree {
           parents: personData.parents,
           sex: personData.sex,
           birthday: personData.birthday,
+          isRemovable: personData.isRemovable,
           position: {
             x: graph.node(nodeID).x,
             y: graph.node(nodeID).y,
