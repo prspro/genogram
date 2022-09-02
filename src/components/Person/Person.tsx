@@ -3,7 +3,6 @@ import usePerson from "./usePerson";
 import "./person.sass";
 import classNames from "classnames";
 import { IPerson } from "../../types/types";
-import EditableField from "../EditableField/EditableField";
 
 interface IPersonComponentProps {
   person: IPerson;
@@ -26,17 +25,11 @@ const Person = ({ person }: IPersonComponentProps) => {
           <ul className="person__prop-list">
             <li className="person__prop-item">
               <span className="person__prop-name">Name:</span>
-              <EditableField
-                value={person.name}
-                className="person__prop-value"
-              />
+              <span className="person__prop-value">{person.name}</span>
             </li>
             <li className="person__prop-item">
               <span className="person__prop-name">Surname:</span>
-              <EditableField
-                value={person.surName}
-                className="person__prop-value"
-              />
+              <span className="person__prop-value">{person.surName}</span>
             </li>
             <li className="person__prop-item">
               <span className="person__prop-name">Birthday:</span>
@@ -48,7 +41,7 @@ const Person = ({ person }: IPersonComponentProps) => {
                 </span>
                 <span className="person__birthday person__birthday--month">
                   {person.birthday
-                    ? person.birthday?.getMonth().toString()
+                    ? (person.birthday?.getMonth() + 1).toString()
                     : "??"}
                 </span>
                 <span className="person__birthday person__birthday--year">

@@ -46,7 +46,7 @@ const usePerson = (): IUsePerson => {
   };
 
   const removePersonFromTree = (currentPerson: IPerson): void => {
-    dispatch(removePerson(currentPerson));
+    dispatch(removePerson(currentPerson.id));
   };
 
   return {

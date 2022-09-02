@@ -4,6 +4,7 @@ export interface IPerson {
   middleName?: string;
   surName: string;
   birthday?: Date;
+  timestamp: number;
   sex: "male" | "female";
   parents: string[];
   position?: IPoint;

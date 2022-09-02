@@ -4,6 +4,7 @@ import {
   SubmitHandler,
   UseFormRegister,
   UseFormHandleSubmit,
+  Control,
 } from "react-hook-form";
 import { IPerson } from "../../types/types";
 import { useSelector, useDispatch } from "react-redux";
@@ -20,18 +21,13 @@ import { hidePersonForm } from "../../store/personFormSlice";
 
 interface IUsePersonForm {
   isShown: boolean;
-  register: UseFormRegister<IFormPerson>;
-  handleSubmit: UseFormHandleSubmit<IFormPerson>;
-  onSubmit: (arg: IFormPerson) => void;
+  control: Control<IPerson, any>;
+  register: UseFormRegister<IPerson>;
+  handleSubmit: UseFormHandleSubmit<IPerson>;
+  onSubmit: (arg: IPerson) => void;
 }
 
-interface IFormPerson extends IPerson {
-  dateDay: number;
-  dateMonth: number;
-  dateYear: number;
-}
-
-const usePersonForm = ():IUsePersonForm => {
+const usePersonForm = (): IUsePersonForm => {
   const isShown = useSelector((state: RootState) => state.personForm.isShown);
   const submitType = useSelector(
     (state: RootState) => state.personForm.submitType
@@ -43,17 +39,20 @@ const usePersonForm = ():IUsePersonForm => {
     )
   );
 
+  const currentPersonDate = new Date(currentPersonData?.timestamp || "");
+
   const dispatch = useDispatch();
 
   const {
     register,
     reset,
+    control,
     formState,
     formState: { isSubmitSuccessful },
     handleSubmit,
     formState: { errors },
     setValue,
-  } = useForm<IFormPerson>();
+  } = useForm<IPerson>();
 
   useEffect(() => {
     setValue(
@@ -64,20 +63,27 @@ const usePersonForm = ():IUsePersonForm => {
       "surName",
       submitType === "editPerson" ? currentPersonData?.surName || "" : ""
     );
+    setValue(
+      "birthday",
+      submitType === "editPerson" ? new Date(currentPersonData?.timestamp || Date.now()) : new Date()
+    )
     if (formState.isSubmitSuccessful) {
       reset();
     }
   }, [formState, reset]);
 
-  const addPersonParent = (formData: IFormPerson): void => {
+  const addPersonParent = (formData: IPerson): void => {
     const newPersonID = uuidv4();
+    
     dispatch(
       addPerson({
         id: newPersonID,
         name: formData.name,
         middleName: "Ascendant",
         surName: formData.surName,
-        birthday: new Date(formData.dateDay, formData.dateMonth, formData.dateYear),
+        // birthday: new Date(formData.dateDay, formData.dateMonth, formData.dateYear),
+        birthday: undefined,
+        timestamp: formData.birthday?.getTime() || 0,
         sex: formData.sex,
         parents: [],
         isRemovable: true,
@@ -88,7 +94,7 @@ const usePersonForm = ():IUsePersonForm => {
     dispatch(hidePersonForm());
   };
 
-  const addPersonChild = (formData: IFormPerson): void => {
+  const addPersonChild = (formData: IPerson): void => {
     const newPersonID = uuidv4();
     dispatch(
       addPerson({
@@ -96,7 +102,9 @@ const usePersonForm = ():IUsePersonForm => {
         name: formData.name,
         middleName: "Ascendant",
         surName: formData.surName,
-        birthday: new Date(formData.dateDay, formData.dateMonth, formData.dateYear),
+        // birthday: new Date(formData.dateDay, formData.dateMonth, formData.dateYear),
+        birthday: undefined,
+        timestamp: formData.birthday?.getTime() || 0,
         sex: formData.sex,
         parents: [],
         isRemovable: true,
@@ -107,14 +115,22 @@ const usePersonForm = ():IUsePersonForm => {
     dispatch(hidePersonForm());
   };
 
-  const editPersonData = (formData: IFormPerson): void => {
+  const editPersonData = (formData: IPerson): void => {
+
+    // console.log(Date.parse(formData.birthday));
+
     dispatch(
       editPerson({
         id: currentPersonData?.id || uuidv4(),
         name: formData.name,
         middleName: formData.middleName,
         surName: formData.surName,
-        birthday: new Date(formData.dateDay, formData.dateMonth, formData.dateYear),
+        // birthday: new Date(formData.dateDay, formData.dateMonth, formData.dateYear),
+        birthday: undefined,
+        // timestamp: Date.parse(
+        //   `${formData.dateYear}-${formData.dateMonth}-${formData.dateDay}`
+        // ),
+        timestamp: formData.birthday?.getTime() || 0,
         sex: formData.sex,
         parents: currentPersonData?.parents || [],
         isRemovable: currentPersonData?.isRemovable || true,
@@ -124,7 +140,7 @@ const usePersonForm = ():IUsePersonForm => {
     dispatch(hidePersonForm());
   };
 
-  const onSubmit: SubmitHandler<IFormPerson> = (formData) => {
+  const onSubmit: SubmitHandler<IPerson> = (formData) => {
     switch (submitType) {
       case "addPersonParent":
         addPersonParent(formData);
@@ -140,7 +156,7 @@ const usePersonForm = ():IUsePersonForm => {
     }
   };
 
-  return { isShown, register, handleSubmit, onSubmit };
+  return { isShown, control, register, handleSubmit, onSubmit };
 };
 
 export default usePersonForm;

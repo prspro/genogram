@@ -17,7 +17,8 @@ const initialState: IInitialState = {
       // parents: ["ascendant1", "ascendant2"],
       parents: [],
       // birthday: new Date(1995, 11, 17),
-      birthday: undefined,
+      // birthday: undefined,
+      timestamp: Date.parse("1995-11-17"),
       isRemovable: false,
     },
   ],
@@ -31,9 +32,9 @@ const personSlice = createSlice({
     addPerson: (state, action: PayloadAction<IPerson>) => {
       state.personList.push(action.payload);
     },
-    removePerson: (state, action: PayloadAction<IPerson>) => {
-      state.personList = state.personList.filter((entry) => entry.id !== action.payload.id).map(entry => {
-        return {...entry, parents: entry.parents.filter(parentID => parentID !== action.payload.id)}
+    removePerson: (state, action: PayloadAction<string>) => {
+      state.personList = state.personList.filter((entry) => entry.id !== action.payload).map(entry => {
+        return {...entry, parents: entry.parents.filter(parentID => parentID !== action.payload)}
       });
     },
     editPerson: (state, action: PayloadAction<IPerson>) => {

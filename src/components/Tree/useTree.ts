@@ -185,8 +185,9 @@ export default function useTree(): IUseTree {
           surName: personData.surName,
           parents: personData.parents,
           sex: personData.sex,
-          birthday: personData.birthday,
+          birthday: new Date(personData.timestamp),
           isRemovable: personData.isRemovable,
+          timestamp: personData.timestamp,
           position: {
             x: graph.node(nodeID).x,
             y: graph.node(nodeID).y,
