@@ -9,6 +9,7 @@ interface IPersonComponentProps {
 }
 
 const Person = ({ person }: IPersonComponentProps) => {
+
   const {
     isSwitched,
     handleSwitch,
@@ -59,7 +60,11 @@ const Person = ({ person }: IPersonComponentProps) => {
             )}
             <button onClick={() => addDescendant(person)}>Add child</button>
             <button onClick={() => editPerson(person)}>Edit</button>
-            <button onClick={() => removePersonFromTree(person)}>remove</button>
+            {person.isRemovable && (
+              <button onClick={() => removePersonFromTree(person)}>
+                remove
+              </button>
+            )}
           </div>
         )}
       </div>

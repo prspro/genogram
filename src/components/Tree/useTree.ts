@@ -197,7 +197,7 @@ export default function useTree(): IUseTree {
       }),
       graphDimensions: {
         width: graph?.graph().width || 0,
-        height: graph?.graph().width || 0,
+        height: graph?.graph().height || 0,
       },
     };
   };

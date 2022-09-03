@@ -37,7 +37,7 @@ const PersonForm = () => {
           control={control}
           render={({ field }) => (
             <DatePicker
-              dateFormat="dd-mm-yyyy"
+              // dateFormat="dd-mm-yyyy"
               placeholderText="Select date"
               onChange={(date) => field.onChange(date)}
               selected={field.value}

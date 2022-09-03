@@ -65,8 +65,10 @@ const usePersonForm = (): IUsePersonForm => {
     );
     setValue(
       "birthday",
-      submitType === "editPerson" ? new Date(currentPersonData?.timestamp || Date.now()) : new Date()
-    )
+      submitType === "editPerson"
+        ? new Date(currentPersonData?.timestamp || Date.now())
+        : new Date()
+    );
     if (formState.isSubmitSuccessful) {
       reset();
     }
@@ -74,7 +76,7 @@ const usePersonForm = (): IUsePersonForm => {
 
   const addPersonParent = (formData: IPerson): void => {
     const newPersonID = uuidv4();
-    
+
     dispatch(
       addPerson({
         id: newPersonID,
@@ -116,7 +118,6 @@ const usePersonForm = (): IUsePersonForm => {
   };
 
   const editPersonData = (formData: IPerson): void => {
-
     // console.log(Date.parse(formData.birthday));
 
     dispatch(
