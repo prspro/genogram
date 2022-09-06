@@ -134,7 +134,7 @@ const usePersonForm = (): IUsePersonForm => {
         timestamp: formData.birthday?.getTime() || 0,
         sex: formData.sex,
         parents: currentPersonData?.parents || [],
-        isRemovable: currentPersonData?.isRemovable || true,
+        isRemovable: currentPersonData?.isRemovable || false,
       })
     );
     dispatch(hideOverlay());

@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { IPerson } from "../types/types";
+import { isAssertEntry } from "typescript";
 
 interface IInitialState {
   personList: IPerson[];
@@ -25,6 +26,23 @@ const initialState: IInitialState = {
   currentPersonID: "root",
 };
 
+function isRomavable(personID: string, personList: IPerson[]): boolean {
+  const person = personList.find((entry) => entry.id === personID);
+  const personParentIDList = person?.parents || [];
+  const personChildrenIDList = personList.filter((entry) =>
+    entry.parents.includes(personID)
+  );
+  if (
+    ((personParentIDList.length === 0 && personChildrenIDList.length === 1) ||
+      (personChildrenIDList.length === 0 && personParentIDList.length === 1)) &&
+    personID !== "root"
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 const personSlice = createSlice({
   name: "personList",
   initialState,
@@ -33,34 +51,22 @@ const personSlice = createSlice({
       state.personList.push(action.payload);
     },
     removePerson: (state, action: PayloadAction<string>) => {
-      const isRomavable = (personID: string): boolean => {
-        const person = state.personList.find((entry) => entry.id === personID);
-        const personParentIDList = person?.parents || [];
-        const personChildrenIDList = state.personList.filter((entry) =>
-          entry.parents.includes(personID)
-        );
-        if (
-          personParentIDList.length === 0 ||
-          personChildrenIDList.length === 0
-        ) {
-          return true;
-        } else {
-          return false;
-        }
-      };
-
       const a = state.personList
         .filter((entry) => entry.id !== action.payload)
         .map((entry) => {
           return {
             ...entry,
-            isRemovable: isRomavable(entry.id),
             parents: entry.parents.filter(
               (parentID) => parentID !== action.payload
             ),
           };
+        })
+        .map((entry, idx, entryList) => {
+          return {
+            ...entry,
+            isRemovable: isRomavable(entry.id, entryList),
+          };
         });
-
       state.personList = a;
     },
     editPerson: (state, action: PayloadAction<IPerson>) => {
