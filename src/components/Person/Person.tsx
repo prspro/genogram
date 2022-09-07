@@ -9,7 +9,6 @@ interface IPersonComponentProps {
 }
 
 const Person = ({ person }: IPersonComponentProps) => {
-
   const {
     isSwitched,
     handleSwitch,
@@ -35,21 +34,11 @@ const Person = ({ person }: IPersonComponentProps) => {
             <li className="person__prop-item">
               <span className="person__prop-name">Birthday:</span>
               <div className="person__prop-value">
-                <span className="person__birthday person__birthday--day">
-                  {person.birthday
-                    ? person.birthday?.getDate().toString()
-                    : "??"}
-                </span>
-                <span className="person__birthday person__birthday--month">
-                  {person.birthday
-                    ? (person.birthday?.getMonth() + 1).toString()
-                    : "??"}
-                </span>
-                <span className="person__birthday person__birthday--year">
-                  {person.birthday
-                    ? person.birthday?.getFullYear().toString()
-                    : "????"}
-                </span>
+                {(person.birthday?.getDate() || 0) > 9 ? person.birthday?.getDate().toString() : "0" + person.birthday?.getDate().toString()}
+                .
+                {(person.birthday?.getMonth() || 0) > 9 ? ((person.birthday?.getMonth() || 0) + 1).toString() : "0" + ((person.birthday?.getMonth() || 0) + 1).toString()}
+                .
+                {person.birthday?.getFullYear() || 0}
               </div>
             </li>
           </ul>

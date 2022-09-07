@@ -83,7 +83,6 @@ const usePersonForm = (): IUsePersonForm => {
         name: formData.name,
         middleName: "Ascendant",
         surName: formData.surName,
-        // birthday: new Date(formData.dateDay, formData.dateMonth, formData.dateYear),
         birthday: undefined,
         timestamp: formData.birthday?.getTime() || 0,
         sex: formData.sex,
@@ -104,7 +103,6 @@ const usePersonForm = (): IUsePersonForm => {
         name: formData.name,
         middleName: "Ascendant",
         surName: formData.surName,
-        // birthday: new Date(formData.dateDay, formData.dateMonth, formData.dateYear),
         birthday: undefined,
         timestamp: formData.birthday?.getTime() || 0,
         sex: formData.sex,
@@ -118,19 +116,13 @@ const usePersonForm = (): IUsePersonForm => {
   };
 
   const editPersonData = (formData: IPerson): void => {
-    // console.log(Date.parse(formData.birthday));
-
     dispatch(
       editPerson({
         id: currentPersonData?.id || uuidv4(),
         name: formData.name,
         middleName: formData.middleName,
         surName: formData.surName,
-        // birthday: new Date(formData.dateDay, formData.dateMonth, formData.dateYear),
         birthday: undefined,
-        // timestamp: Date.parse(
-        //   `${formData.dateYear}-${formData.dateMonth}-${formData.dateDay}`
-        // ),
         timestamp: formData.birthday?.getTime() || 0,
         sex: formData.sex,
         parents: currentPersonData?.parents || [],
