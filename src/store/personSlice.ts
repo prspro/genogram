@@ -13,6 +13,7 @@ const initialState: IInitialState = {
     {
       id: "root",
       name: "Root",
+      middleName: "",
       surName: "Person",
       sex: "male",
       // parents: ["ascendant1", "ascendant2"],

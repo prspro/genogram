@@ -1,18 +1,18 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IPerson } from "../types/types";
-
-type SubmitType = "addPersonParent" | "addPersonChild" | "editPerson";
+import { SubmitType } from "../types/types";
 
 interface IPersonFormSlice {
   isShown: boolean;
   submitType: SubmitType;
   currentPersonID: string;
+  suggestedSecondParentID: string;
 }
 
 const initialState: IPersonFormSlice = {
   isShown: false,
   submitType: "addPersonParent",
   currentPersonID: "",
+  suggestedSecondParentID: ""
 };
 
 const personFormSlice = createSlice({
@@ -35,6 +35,9 @@ const personFormSlice = createSlice({
     setSubmitType: (state, action: PayloadAction<SubmitType>) => {
       state.submitType = action.payload;
     },
+    setSuggestedSecondParentID: (state, action: PayloadAction<string>) => {
+      state.suggestedSecondParentID = action.payload;
+    },
   },
 });
 
@@ -44,5 +47,6 @@ export const {
   togglePersonForm,
   setCurrentpersonID,
   setSubmitType,
+  setSuggestedSecondParentID,
 } = personFormSlice.actions;
 export default personFormSlice.reducer;

@@ -4,9 +4,10 @@ import classNames from "classnames";
 import { Controller } from "react-hook-form";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import PersonFilter from "../PersonFilter/PersonFilter";
 
 const PersonForm = () => {
-  const { isShown, register, control, handleSubmit, onSubmit } =
+  const { isShown, register, control, handleSubmit, onSubmit, isSecondParentSelectable } =
     usePersonForm();
   return (
     <div className={classNames("person-form", { shown: isShown })}>
@@ -44,6 +45,7 @@ const PersonForm = () => {
             />
           )}
         />
+        {isSecondParentSelectable && <PersonFilter personSelectHandler={() => {console.log("clicked")}} />}
         <input className="person-form__input" type="submit" />
       </form>
     </div>

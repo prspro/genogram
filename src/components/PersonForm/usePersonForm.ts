@@ -25,6 +25,7 @@ interface IUsePersonForm {
   register: UseFormRegister<IPerson>;
   handleSubmit: UseFormHandleSubmit<IPerson>;
   onSubmit: (arg: IPerson) => void;
+  isSecondParentSelectable: boolean;
 }
 
 const usePersonForm = (): IUsePersonForm => {
@@ -39,7 +40,20 @@ const usePersonForm = (): IUsePersonForm => {
     )
   );
 
-  const currentPersonDate = new Date(currentPersonData?.timestamp || "");
+  const personList = useSelector(
+    (state: RootState) => state.personList.personList
+  );
+
+  const suggestedSecondParentID = useSelector((state: RootState) => state.personForm.suggestedSecondParentID);
+
+  const isSecondParentSelectable =
+    (
+      submitType === "addPersonChild"
+      // || submitType === "editPerson"
+    ) &&
+    personList.filter((entry) =>
+      entry.parents.includes(currentPersonData?.id || "")
+    ).length > 0;
 
   const dispatch = useDispatch();
 
@@ -72,11 +86,10 @@ const usePersonForm = (): IUsePersonForm => {
     if (formState.isSubmitSuccessful) {
       reset();
     }
-  }, [formState, reset]);
+  }, [formState, suggestedSecondParentID, reset]);
 
   const addPersonParent = (formData: IPerson): void => {
     const newPersonID = uuidv4();
-
     dispatch(
       addPerson({
         id: newPersonID,
@@ -106,7 +119,7 @@ const usePersonForm = (): IUsePersonForm => {
         birthday: undefined,
         timestamp: formData.birthday?.getTime() || 0,
         sex: formData.sex,
-        parents: [],
+        parents: suggestedSecondParentID !== "" ? [suggestedSecondParentID] : [], //! has to be rewrited (as connectChildToparent mb?)
         isRemovable: true,
       })
     );
@@ -149,7 +162,14 @@ const usePersonForm = (): IUsePersonForm => {
     }
   };
 
-  return { isShown, control, register, handleSubmit, onSubmit };
+  return {
+    isShown,
+    control,
+    register,
+    handleSubmit,
+    onSubmit,
+    isSecondParentSelectable,
+  };
 };
 
 export default usePersonForm;
