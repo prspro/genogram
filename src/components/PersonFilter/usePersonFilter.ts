@@ -3,9 +3,7 @@ import { useSelector } from "react-redux";
 import type { RootState } from "../../store";
 import { IPerson } from "../../types/types";
 import { useDispatch } from "react-redux";
-import {
-  setSuggestedSecondParentID,
-} from "../../store/personFormSlice";
+import { setSuggestedSecondParentID } from "../../store/personFormSlice";
 
 interface IUsePersonFilter {
   filteredPersonList: IPerson[];
@@ -25,24 +23,27 @@ const usePersonFilter = (): IUsePersonFilter => {
   );
   const inputRef = useRef<HTMLInputElement>(null);
   const [searchValue, setSearchValue] = useState<string>("");
-  const [selectedSecondParent, setSelectedSecondParent] = useState<IPerson | undefined>(undefined);
+  const [selectedSecondParent, setSelectedSecondParent] = useState<
+    IPerson | undefined
+  >(undefined);
+
+  console.log(selectedSecondParent);
 
   const dispatch = useDispatch();
 
   const handleOnChange = () => {
-    setSearchValue(inputRef.current?.value || "");
+    setSearchValue((prevValue) => inputRef.current?.value || prevValue);
   };
 
-  const selectSuggestedParent = (person: IPerson):void => {
+  const selectSuggestedParent = (person: IPerson): void => {
     setSelectedSecondParent(person);
-    dispatch(
-      setSuggestedSecondParentID(person.id)
-    );
+    dispatch(setSuggestedSecondParentID(person.id));
   };
 
   const removeSuggestedParent = (): void => {
     setSearchValue("");
     setSelectedSecondParent(undefined);
+    dispatch(setSuggestedSecondParentID(""));
   };
 
   const filteredPersonList =
@@ -61,7 +62,14 @@ const usePersonFilter = (): IUsePersonFilter => {
         })
       : [];
 
-  return { filteredPersonList, inputRef, handleOnChange, selectedSecondParent, selectSuggestedParent, removeSuggestedParent };
+  return {
+    filteredPersonList,
+    inputRef,
+    handleOnChange,
+    selectedSecondParent,
+    selectSuggestedParent,
+    removeSuggestedParent,
+  };
 };
 
 export default usePersonFilter;

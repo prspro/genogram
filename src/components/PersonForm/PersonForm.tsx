@@ -45,7 +45,7 @@ const PersonForm = () => {
             />
           )}
         />
-        {isSecondParentSelectable && <PersonFilter personSelectHandler={() => {console.log("clicked")}} />}
+        {isSecondParentSelectable && <PersonFilter />}
         <input className="person-form__input" type="submit" />
       </form>
     </div>

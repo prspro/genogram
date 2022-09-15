@@ -101,6 +101,10 @@ export default function useTree(): IUseTree {
               parentPartner.position &&
               person.position
             ) {
+
+              console.log(parent.position.x, parentPartner.position.x);
+              
+
               linkList.push({
                 source: {
                   id: parent.id,
@@ -150,6 +154,7 @@ export default function useTree(): IUseTree {
 
     // Set an object for the graph label
     graph.setGraph({});
+    // graph.setGraph({nodesep: 50, ranker: "longest-path"});
 
     // Default to assigning a new object as a label for each new edge.
     graph.setDefaultEdgeLabel(function () {

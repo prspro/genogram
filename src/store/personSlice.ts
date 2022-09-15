@@ -8,6 +8,11 @@ interface IInitialState {
   currentPersonID: string;
 }
 
+interface IAddPerson {
+  newPerson: IPerson;
+  currentPersonID: string;
+}
+
 const initialState: IInitialState = {
   personList: [
     {
@@ -92,19 +97,42 @@ const personSlice = createSlice({
         }
       });
     },
-    addChildToPerson: (state, action: PayloadAction<string>) => {
-      state.personList = state.personList.map((person) => {
-        if (person.id === action.payload) {
-          return {
-            ...person,
-            parents: [...person.parents, state.currentPersonID],
-          };
-        } else if (person.id === state.currentPersonID) {
-          return { ...person, isRemovable: false };
-        } else {
-          return person;
-        }
+    // addChildToPerson: (state, action: PayloadAction<string>) => {
+    //   state.personList = state.personList.map((person) => {
+    //     if (person.id === action.payload) {
+    //       return {
+    //         ...person,
+    //         parents: [...person.parents, state.currentPersonID],
+    //       };
+    //     } else if (person.id === state.currentPersonID) {
+    //       return { ...person, isRemovable: false };
+    //     } else {
+    //       return person;
+    //     }
+    //   });
+    // },
+    addChildToPerson: (state, action: PayloadAction<IPerson>) => {
+      const newPersonParentList = action.payload.parents;
+
+      // const straightSiblingsList = state.personList.filter((person) => {
+      //   return newPersonParentList.reduce((prev, curr) => {
+      //     return prev && person.parents.includes(curr);
+      //   }, true);
+      // });
+
+      const firstStraightSiblingIdx = state.personList.findIndex((person) => {
+        return newPersonParentList.reduce((accum, current) => {
+          console.log(current);
+
+          return accum && person.parents.includes(current);
+        }, true);
       });
+
+      if (firstStraightSiblingIdx < 0) {
+        state.personList.push(action.payload);
+      } else {
+        state.personList.splice(firstStraightSiblingIdx, 0, action.payload);
+      }
     },
     setCurrentPersonID: (state, action: PayloadAction<string>) => {
       state.currentPersonID = action.payload;

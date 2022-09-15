@@ -34,6 +34,10 @@ const usePersonForm = (): IUsePersonForm => {
     (state: RootState) => state.personForm.submitType
   );
 
+  const currentPersonID = useSelector(
+    (state: RootState) => state.personList.currentPersonID
+  );
+
   const currentPersonData = useSelector((state: RootState) =>
     state.personList.personList.find(
       (person) => person.id === state.personList.currentPersonID
@@ -44,13 +48,13 @@ const usePersonForm = (): IUsePersonForm => {
     (state: RootState) => state.personList.personList
   );
 
-  const suggestedSecondParentID = useSelector((state: RootState) => state.personForm.suggestedSecondParentID);
+  const suggestedSecondParentID = useSelector(
+    (state: RootState) => state.personForm.suggestedSecondParentID
+  );
 
   const isSecondParentSelectable =
-    (
-      submitType === "addPersonChild"
-      // || submitType === "editPerson"
-    ) &&
+    submitType === "addPersonChild" &&
+    // || submitType === "editPerson"
     personList.filter((entry) =>
       entry.parents.includes(currentPersonData?.id || "")
     ).length > 0;
@@ -69,14 +73,24 @@ const usePersonForm = (): IUsePersonForm => {
   } = useForm<IPerson>();
 
   useEffect(() => {
-    setValue(
-      "name",
-      submitType === "editPerson" ? currentPersonData?.name || "" : ""
-    );
-    setValue(
-      "surName",
-      submitType === "editPerson" ? currentPersonData?.surName || "" : ""
-    );
+    if (submitType === "editPerson") {
+      setValue(
+        "name",
+        currentPersonData?.name || ""
+      );
+      setValue(
+        "middleName",
+        currentPersonData?.middleName || ""
+      );
+      setValue(
+        "surName",
+        currentPersonData?.surName || ""
+      );
+      // setValue(
+      //   "birthday",
+      //   new Date(currentPersonData?.timestamp || Date.now())
+      // );
+    }
     setValue(
       "birthday",
       submitType === "editPerson"
@@ -86,7 +100,7 @@ const usePersonForm = (): IUsePersonForm => {
     if (formState.isSubmitSuccessful) {
       reset();
     }
-  }, [formState, suggestedSecondParentID, reset]);
+  }, [formState, reset]);
 
   const addPersonParent = (formData: IPerson): void => {
     const newPersonID = uuidv4();
@@ -110,8 +124,24 @@ const usePersonForm = (): IUsePersonForm => {
 
   const addPersonChild = (formData: IPerson): void => {
     const newPersonID = uuidv4();
+    // dispatch(
+    //   addPerson({
+    //     id: newPersonID,
+    //     name: formData.name,
+    //     middleName: "Ascendant",
+    //     surName: formData.surName,
+    //     birthday: undefined,
+    //     timestamp: formData.birthday?.getTime() || 0,
+    //     sex: formData.sex,
+    //     parents:
+    //       suggestedSecondParentID !== ""
+    //         ? [suggestedSecondParentID, currentPersonID]
+    //         : [currentPersonID], //! has to be rewrited? (as connectChildToparent mb?)
+    //     isRemovable: true,
+    //   })
+    // );
     dispatch(
-      addPerson({
+      addChildToPerson({
         id: newPersonID,
         name: formData.name,
         middleName: "Ascendant",
@@ -119,11 +149,14 @@ const usePersonForm = (): IUsePersonForm => {
         birthday: undefined,
         timestamp: formData.birthday?.getTime() || 0,
         sex: formData.sex,
-        parents: suggestedSecondParentID !== "" ? [suggestedSecondParentID] : [], //! has to be rewrited (as connectChildToparent mb?)
+        parents:
+          suggestedSecondParentID !== "" && isSecondParentSelectable
+            ? [suggestedSecondParentID, currentPersonID]
+            : [currentPersonID], //! has to be rewrited? (as connectChildToparent mb?)
         isRemovable: true,
       })
     );
-    dispatch(addChildToPerson(newPersonID));
+    // dispatch(addChildToPerson(newPersonID));
     dispatch(hideOverlay());
     dispatch(hidePersonForm());
   };
